@@ -1,0 +1,89 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox ">
+      <div class="ibox-title">
+        <% if policy(@order).update? %>
+          <h5>Actualizar una orden <small>Actualice los campos correctamente.</small></h5>
+          
+        <% else %>
+          <h5>Programar una orden <small>Rellene los campos correctamente.</small></h5>
+        <% end %>
+      </div>
+      <div class="ibox-content">
+        <%= simple_form_for(@order) do |f| %>
+          <%= f.error_notification %>
+          <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Seleccionar fecha: </label>
+            <%= f.input :fecha, label: false, input_html: { class: 'form-control select-tamaño', id: 'my-select' } %>
+          </div>
+          
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Digitar consecutivo: </label>
+            <%= f.input :consecutivo, label: false, input_html: { type: 'number', step: 1, min: 1, min: 1111,max: 99999 } %>
+            <% if @order.errors[:consecutivo].present? %>
+              <p class="text-danger"><%= @order.errors[:consecutivo].join(", ") %></p>
+            <% end %>
+          </div>
+
+          
+          <div class="hr-line-dashed"></div>
+          <div>
+            <h4>Orden </h4>
+            <div class='fields col-lg-6'>
+              <%= f.simple_fields_for :packs do |builder| %>
+                <%= render 'pack', f: builder %>
+              <% end %>            
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-4 col-sm-offset-2">
+              <%= link_to_add_row('Adicionar', f, :packs, class: 'btn-primary btn-sm') %>
+            </div>    
+          </div>
+          <div class="hr-line-dashed"></div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label"> Ciudad origen: </label>
+            <%= f.input :origen, as: :select, collection: ['Barranquilla', 'Sincelejo', 'Cartagena', 'Santa Marta', 'Valledupar', 'Monteria'], prompt: 'Selecciona una ciudad', input_html: { class: 'form-control select-tamaño', id: 'my-select' }, label: false, wrapper: false %>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label"> Ciudad destino: </label>
+            <%= f.input :destino, as: :select, collection: ['Barranquilla', 'Sincelejo', 'Cartagena', 'Santa Marta', 'Valledupar', 'Monteria'], prompt: 'Selecciona una ciudad', input_html: { class: 'form-control select-tamaño', id: 'my-select' }, label: false, wrapper: false %>
+          </div>
+          
+          <div class="hr-line-dashed"></div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Imagen:</label>
+            <div class="col-sm-10">
+              <%= f.file_field :avatar, class: 'form-control' %>
+              <% if @order.avatar.present? %>
+                <%= image_tag @order.avatar.url, class: 'img-thumbnail', style: 'max-height: 100px;' %>
+              <% end %>
+            </div>
+          </div>
+          <div class="hr-line-dashed"></div>
+          <% if policy(@order).update? %>
+            <div class="form-group row"><label class="col-sm-2 col-form-label">Estado: </label>
+              
+              <%= f.select :estado, ['Aceptado', 'Recogido', 'En camino', 'En reparto', 'Entregado'], {}, class: 'form-control m-b col-lg-6' %>
+              
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label"> Ruta:  </label>
+              <%= f.collection_select(:dispatch_id, Dispatch.all, :id, :hora_ruta, { prompt: "Selecciona una ruta" }, class: "form-control m-b col-lg-6", label: false) %>
+            </div>
+            <div class="form-group row"><label class="col-sm-2 col-form-label">Valor </label>
+              <div class="m-b col-lg-6">
+                <%= f.input :valor, label: false  %>
+              </div>
+            </div>
+          <% end %>
+          <div class="form-group row">
+            <div class="col-sm-4 col-sm-offset-2">
+              <%= f.button :submit, class:'btn btn-primary' %>
+            </div>
+          </div>           
+        <%end%>
+      </div>
+    </div>
+  </div>
+</div>

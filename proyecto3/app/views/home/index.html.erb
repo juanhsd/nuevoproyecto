@@ -1,0 +1,123 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="ibox">
+        <div class="ibox-title">
+          <div class="ibox-tools">
+            <span class="label label-success float-right">Mensual</span>
+          </div>
+          <h5>Ingresos</h5>
+        </div>
+        <div class="ibox-content">
+          <h1 class="no-margins"><%= number_to_currency(@orders.sum(:valor), unit: 'COP', separator: ',', delimiter: '.', format: '%u %n') %></h1>
+          <small>Total ingresado</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="ibox">
+        <div class="ibox-title">
+          <div class="ibox-tools">
+            <span class="label label-info float-right"> Hoy </span>
+          </div>
+          <h5>Envíos</h5>
+        </div>
+        <div class="ibox-content">
+          <% if policy(current_user).admin? %>
+            <% @contador = @orders.count %>
+            <% if @contador > 0 %>
+              <h1 class="no-margins"><%= @contador %></h1>
+              <small><%= link_to "Ver envíos", orders_path %></small>
+            <% else %>
+              <h1 class="no-margins">No hay envíos</h1>
+            <% end %>
+          <% else %>
+            <% if current_user.orders.present? %>
+              <h1 class="no-margins"><%= current_user.orders.count %></h1>
+              <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
+              <small><%= link_to "Programar envío", new_order_path %></small>
+            <% else %>
+              <h1 class="no-margins">0</h1>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12">
+    <div class="ibox-content table-responsive">
+      <table class="table table-hover no-margins text-center">
+        <thead>
+          <tr>
+            <th>Estado</th>
+            <th>Consecutivo</th>
+            <th>Fecha</th>
+            <th>Origen</th>
+            <th>Destino</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @pendientes.present? %>
+            <% @pendientes.each do |order| %>
+              <tr>
+                <td><span class="label label-warning"><%= order.estado %></span></td>
+                <td><%= link_to order.consecutivo, order_path(order) %></td>
+                <td><i class="fa calendar"></i><%= order.fecha %></td>
+                <td><%= order.origen %></td>
+                <td><%= order.destino %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-lg-12 arriba">
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5>Rutas disponibles</h5>
+        <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+          <a class="close-link">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+      </div>
+      <div class="ibox-content table-responsive">
+        <div class="row">
+          <div class="col-lg-12">
+            <table class="table table-hover no-margins text-center">
+              <thead>
+                <tr>
+                  <th>Ruta</th>
+                  <th>Horario</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @dispatches.each do |dispatch| %>
+                  <% if dispatch.switch %>
+                    <tr>
+                      <td><%= "#{dispatch.origen} - #{dispatch.destino}" %></td>
+                      <td><%= dispatch.horario.strftime('%I:%M%p') %></td>
+                      <td><span class="label label-success">Disponible</span></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+            <div class="text-right">
+              <% if policy(current_user).admin? %>
+                <%= link_to 'Ver rutas', dispatches_path %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

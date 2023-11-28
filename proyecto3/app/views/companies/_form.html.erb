@@ -1,0 +1,16 @@
+<%= simple_form_for(@company) do |f| %>
+    <%= f.error_notification %>
+    <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %> 
+    <%= f.input :nit, as: :numeric %>
+    <%= f.input :razon_social %>
+    <div class="input-group">
+        <div class="custom-file">
+            <%= f.input_field :rut, class: 'custom-file-input', label: false %>
+            
+            <label class="custom-file-label"> Elegir archivo </label>
+        </div>
+    </div>
+    <%= f.input :avatar %>
+    
+    <%= f.button :submit, class:'btn btn-primary btn-sm' %>
+<% end %>

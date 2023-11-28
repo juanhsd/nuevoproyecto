@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Dashboard</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title> Domitransp </title>
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="crossorigin="anonymous"></script>
+
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" rel="stylesheet">
 
     <!-- Main css styles -->
@@ -13,37 +20,40 @@
 
     <!-- Main javascript files -->
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= favicon_link_tag asset_path('LogoCurb.png') %>
-  </head>
 
-  <body>
-  <!-- Wrapper-->
-  <div id="wrapper" class="<%= params[:controller] %>.<%= params[:action] %>">
 
-      <!-- Navigation -->
-      <%= render 'layouts/navigation' %>
+</head>
+<body>
 
-      <!-- Page wraper -->
-      <div id="page-wrapper" class="gray-bg <%= @extra_class %>">
+    <!-- Wrapper-->
+    <div id="wrapper" class="<%= params[:controller] %>.<%= params[:action] %>">
 
-      <!-- Page wrapper -->
-      <%= render 'layouts/topnavbar' %>
+        <!-- Navigation -->
+        <%= render 'layouts/navigation' %>
 
-          <!-- Main view  -->
-          <%= yield %>
+        <!-- Page wraper -->
+        <div id="page-wrapper" class="gray-bg <%= @extra_class %>">
 
-          <!-- Footer -->
-          <%= render 'layouts/footer' %>
+            <!-- Page wrapper -->
+            <%= render 'layouts/topnavbar' %>
 
-      </div>
-      <!-- End page wrapper-->
+            <!-- Main view  -->
+            <%= yield %>
 
-  </div>
-  <!-- End wrapper-->
+            <!-- Footer -->
+            <%= render 'layouts/footer' %>
 
-  <!-- Include javascript per-view -->
-  <!-- For demo purpose we include javascript in view but you can easily start SeedProject and organize it with Rails asset pipeline as you want -->
-  
-  <%= yield :javascript %>
+        </div>
+        <!-- End page wrapper-->
 
+    </div>
+    <!-- End wrapper-->
+
+    <!-- Include javascript per-view -->
+    <!-- For demo purpose we include javascript in view but you can easily start SeedProject and organize it with Rails asset pipeline as you want -->
+    <%= yield :javascript %>
+
+    <%= render 'layouts/notificaciones' %>
+
+</body>
 </html>

@@ -1,0 +1,79 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-9">
+    <h2> <%= @order.consecutivo %> </h2>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/"> Inicio </a>
+        </li>
+        <li class="breadcrumb-item">
+            <%= link_to 'Ordenes', orders_path %>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="#"> <strong> <%= @order.consecutivo %><strong> </a>
+        </li>
+    </ol>
+  </div>
+</div>
+<br>
+<div class="ibox-content">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="product-images">
+        <div>
+          <% if @order.avatar.present? %>
+            <%= image_tag @order.avatar.url, class: "product-image", height: "522px", width: "460px" %>
+          <% else %>
+            <p class="image-not-loaded">Imagen no cargada</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="product-details">
+        <h3 class="font-bold m-b-xs"><%= @order.consecutivo %></h3>
+        <div class="m-t-md">
+          <h3 class="product-main-price">
+            Fecha: <%= @order.fecha %>
+          </h3>
+          <%= @order.company.razon_social %>
+        </div>
+        <hr>
+        <div class="product-description">
+          
+          <div class="product-packs">
+          <ul class="list-unstyled">
+            <% @packs.each do |pack|%>
+              <li>
+                <h4git> <%= pack.cantidad + " " + pack.tipo + "(s)"%> </h4git>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        </div>
+        <hr>
+        <div class="product-details-info">
+          
+          <dl class="medium m-t-md">
+            <%if @ruta.present? %> 
+              <dt>Hora de salida: <%=@ruta.hora_ruta%> </dt>
+            <%else%>
+              <dt>Hora de salida: No asignada </dt>
+            <%end%>
+              <% if @order.valor.present? && @order.valor > 0 %>
+              <%= number_to_currency(@order.valor, unit: 'COP', separator: ',', delimiter: '.', format: '%u %n') %>
+            <% else %>
+              En espera de precio
+            <% end %>
+            <dt>Ruta: <%= @order.origen + "-" + @order.destino %>   </dt>
+            
+            <dt>Estado: <%= @order.estado  %></dt>
+          </dl>
+        </div>
+        <hr>
+        <% if current_user.admin? %>
+          <%= link_to 'Editar', edit_order_path(@order), class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

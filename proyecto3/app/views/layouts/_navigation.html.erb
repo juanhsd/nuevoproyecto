@@ -1,26 +1,130 @@
 <nav class="navbar-default navbar-static-side" role="navigation">
-    <div class="sidebar-collapse">
-        <ul class="nav metismenu" id="side-menu">
-            <li class="nav-header">
-            
-                <div class="dropdown profile-element">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <%= image_tag("LogoCurb.png" , width: "150px" )%>
-                    </a>
-                </div>
-                <div class="logo-element">
-                    <%= image_tag("LogoCurb.png" , width: "40px" )%>
-                </div>
+  <div class="sidebar-collapse">
+    <ul class="nav metismenu" id="side-menu">
+      <li class="nav-header">
+        <div class="dropdown profile-element">
+          <div class="rounded-circle-navigation"> 
+            <% if current_user.avatar.present? %>
+              <img alt="image" src="<%= current_user.avatar %>"/>
+            <% else %>
+              <img alt="Imagen no cargada" src="/sinFoto.jpg">
+            <% end %>
+          </div>      
+          <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+              <span class="block m-t-xs font-bold"> <%= current_user.nombre + ' ' + current_user.apellido %></span>
+              Opciones <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu animated fadeInRight m-t-xs">
+              <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+              <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
+              <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
+              <li class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="login.html">Logout</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="<%= 'active' if current_page?('/') %>">
+        <%= link_to "/" do %>
+          <i class="fa fa-laptop"></i> <span class="nav-label"> Inicio </span>
+        <% end %>
+      </li>
+      <% unless policy(current_user).admin? %>
+        <li>
+          <a href="#"><i class="fa fa-flask"></i> <span class="nav-label">Ordenes</span> <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+            <li class="<%= 'active' if current_page?('/') %>">
+              <%= link_to orders_path do %>
+                <span class="nav-label">Mis envios</span>
+              <% end %>
             </li>
-
-            <li class="">
-                <a href=""><span class="nav-label"><%= link_to "Home", root_path %></span> <span class="fa arrow"></span></a> 
-                <a href=""><span class="nav-label"><%= link_to "Ventas", root_path %></span> <span class="fa arrow"></span></a>  
-            </ul>
-            
+            <li class="<%= 'active' if current_page?('/') %>">
+              <%= link_to new_order_path do %>
+                <span class="nav-label">Programar envio</span>
+              <% end %>
+            </li>
+          </ul>
         </li>
-        </ul>
-
-    </div>
+        <li>
+          <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Finanzas</span> <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+            <li class="<%= 'active' if current_page?('/') %>">
+              <%= link_to finanzas_index_path do %>
+                <span class="nav-label">Mis gastos</span>
+              <% end %>
+            </li>
+          </ul>
+        </li> 
+				<li>
+					<a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Mi empresa</span> <span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li class="<%= 'active' if current_page?('companies/index') %>">
+							<%= link_to current_user.company do %>
+								<span class="nav-label">Ver empresa</span>
+							<% end %>						
+						</li>
+					</ul>
+				</li>
+      <% end %>
+      <% if policy(current_user).admin? %>
+        <li>
+          <a href=""><i class="fa fa-flask"></i> <span class="nav-label">Orders</span> <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level collapse">
+            <li><a href="orders"> Ver envios </a></li>
+              
+          </ul>
+        </li>
+        <li>
+          <a href=""><i class="fa fa-road"></i> <span class="nav-label">Rutas</span> <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level collapse">
+            <li><a href="dispatches"> Ver rutas </a></li>
+          </ul>
+        </li>
+        <li class=<%= 'active' if current_page?('companies/') %>>
+          <a href=""><i class="fa fa-sitemap"></i> <span class="nav-label">Empresas</span> <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+            <li>
+              <%= link_to companies_path do %>
+                <span class="nav-label">Ver empresas</span>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to new_company_path do %>
+                <span class="nav-label">Crear empresas</span>
+              <% end %>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label"> Facturas </span> <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+            <li class="<%= 'active' if current_page?('invoices/index') %>">
+              <%= link_to invoices_path do %>
+                <span class="nav-label"> Buscar facturas </span>
+              <% end %>
+            </li>
+            <li class="<%= 'active' if current_page?('invoice/new') %>">
+              <%= link_to new_invoice_path do %>
+                <span class="nav-label">Crear facturas</span>
+              <% end %>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Finanzas</span> <span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+            <li class="<%= 'active' if current_page?('finanzas/index') %>">
+              <%= link_to finanzas_path do %>
+                <span class="nav-label">Ver finanzas</span>
+              <% end %>
+            </li>
+          </ul>
+        </li>
+      <% end %>
+      <li class="<%= 'active' if current_page?('pages/acerca') %>">
+        <%= link_to "/pages/acerca" do %>
+          <i class="fa fa-shopping-cart"></i> <span class="nav-label">Acerca de</span> </span>
+        <% end %>
+      </li>
+    </ul>
+  </div>
 </nav>
-
